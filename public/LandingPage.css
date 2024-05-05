@@ -281,3 +281,17 @@ footer .line {
     font-size: 1.8rem;
     color: #212529;
 }
+@media screen and (max-width: 1000px)
+{
+    .container
+    {
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    #one
+    {
+        display: none;
+    }
+}
