@@ -121,23 +121,25 @@ input[type="submit"]:hover {
     <img src="https://successful-cyan-spider.cyclic.app/public/images/undraw/programmer.gif" alt="men" class="men">
     
     <div class="container">
-        <form id="signupForm" action="" onsubmit="return validateForm()">
+        <form id="signupForm" action="/signup" method="POST">
             <input type="text" id="fullname" name="fullname" placeholder="Full Name" required>
             <input type="text" id="username" name="username" placeholder="User Name" required>
             <input type="email" id="email" name="email" placeholder="Email Address" required>
             <input type="password" id="password" name="password" placeholder="Password" required>
             <input type="date" id="birthdate" name="birthdate" required>
-            <select id="gender" name="gender" required>
-                <option value="" disabled selected>Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
+            <select id="user" name="user" required>
+                <option value="" disabled selected>Select user</option>
+                <option value="admin">admin</option>
+                <option value="student">student</option>
+                <option value="teacher">teacher</option>
             </select>
             <a href="verifyemail"><input type="submit" value="Sign Up" ></a>
         </form>
         <p class="text-center">Already have an account? <a href="login">Log in here</a></p>
     </div>
 </div>
+
+
 
 <script>
 function validateForm() {
