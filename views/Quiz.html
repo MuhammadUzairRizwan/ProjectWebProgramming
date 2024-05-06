@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Quiz</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .navbar {
+            background-color: #3F1651 !important;
+        }
+        .navbar-brand {
+            color: #fff !important;
+        }
+        .navbar-nav .nav-item {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+        .navbar-nav .nav-link {
+            color: #fff !important;
+            border-radius: 20px;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+            background-color: #6C3C86; /* Background color */
+        }
+        .navbar-nav .nav-link:hover {
+            background-color: #563b76;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .options label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .btn-submit {
+            margin-top: 20px;
+            width: 100%;
+            background-color: #F89F5B;
+            border-color: #F89F5B;
+        }
+        .btn-submit:hover {
+            background-color: #eb7922;
+            border-color: #eb7922;
+        }
+        .result {
+            text-align: center;
+            margin-top: 20px;
+            color: #3F1651;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px 0;
+            background-color: #3F1651;
+            color: #fff;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
+        <div class="container-fluid">
+            <a href="#" class="navbar-brand">Examify</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-light" href="#">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-light" href="#">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+</nav>
+
+<div class="container">
+    <h1>Quiz</h1>
+    <form id="quizForm">
+        <div class="question">
+            <p>1. What is the capital of France?</p>
+            <div class="options">
+                <label><input type="radio" name="q1" value="a"> a) London</label>
+                <label><input type="radio" name="q1" value="b"> b) Paris</label>
+                <label><input type="radio" name="q1" value="c"> c) Rome</label>
+            </div>
+        </div>
+        <div class="question">
+            <p>2. Who is the president of the United States?</p>
+            <div class="options">
+                <label><input type="radio" name="q2" value="a"> a) Barack Obama</label>
+                <label><input type="radio" name="q2" value="b"> b) Donald Trump</label>
+                <label><input type="radio" name="q2" value="c"> c) Joe Biden</label>
+            </div>
+        </div>
+        <div class="question">
+            <p>3. What is the capital of Japan?</p>
+            <div class="options">
+                <label><input type="radio" name="q3" value="a"> a) Tokyo</label>
+                <label><input type="radio" name="q3" value="b"> b) Beijing</label>
+                <label><input type="radio" name="q3" value="c"> c) Seoul</label>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-submit">Submit Quiz</button>
+    </form>
+    <div id="result" class="result"></div>
+</div>
+
+<footer>
+    &copy; 2024 Examify. All rights reserved.
+</footer>
+
+<script>
+document.getElementById('quizForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
+    var score = 0;
+    var answers = {
+        'q1': 'b',
+        'q2': 'c',
+        'q3': 'a'
+    };
+
+    var formData = new FormData(this);
+    for (var pair of formData.entries()) {
+        if (answers[pair[0]] === pair[1]) {
+            score++;
+        }
+    }
+
+    var resultElement = document.getElementById('result');
+    resultElement.innerHTML = 'You scored ' + score + ' out of ' + Object.keys(answers).length;
+});
+</script>
+
+</body>
+</html>
