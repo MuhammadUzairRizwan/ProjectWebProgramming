@@ -24,8 +24,18 @@ const teacherSchema = new mongoose.Schema({
     birthdate: { type: Date, required: true }
 });
 
+const QuestionsSchema = new mongoose.Schema({
+    fullname: { type: String, required: true },
+    username: { type: String, required: true },
+    email: { type: String, required: true },
+    password: { type: String, required: true },
+    birthdate: { type: Date, required: true }
+});
+
 const Admin = mongoose.model('Admin', adminSchema);
 const Student = mongoose.model('Student', studentSchema);
 const Teacher = mongoose.model('Teacher', teacherSchema);
+const Questions = mongoose.model('Questions', QuestionsSchema);
 
-module.exports = { Admin, Student, Teacher };
+
+module.exports = { Admin, Student, Teacher,Questions };

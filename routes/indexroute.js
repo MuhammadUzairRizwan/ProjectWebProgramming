@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const router = express.Router();
-const { Admin, Student, Teacher } = require('../models/User');
+const { Admin, Student, Teacher,Questions } = require('../models/User');
 
 
 
