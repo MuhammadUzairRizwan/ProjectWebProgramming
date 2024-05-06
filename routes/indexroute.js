@@ -23,5 +23,13 @@ router.get('/ForgotPassword', (req, res) => {
 router.get('/verifyemail', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/verify_email.html'));
 });
+// Route for the Quiz
+router.get('/Quiz', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/Quiz.html'));
+});
+// Route for the AddQuiz
+router.get('/AddQuiz', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/AddQuiz.html'));
+});
 
 module.exports = router;
