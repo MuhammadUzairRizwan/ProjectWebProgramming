@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const router = express.Router();
-const { Admin, Student, Teacher,Questions } = require('../models/User');
+const { Admin, Student, Teacher,Quiz} = require('../models/User');
 
 
 
@@ -94,6 +94,195 @@ router.get('/Quiz', (req, res) => {
 // Route for the AddQuiz
 router.get('/AddQuiz', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/AddQuiz.html'));
+});
+
+
+router.post('/addQuiz', async (req, res) => {
+    try {
+        const questions = [];
+        for (let i = 1; i <= 10; i++) {
+            const { [`question${i}`]: questionText, [`q${i}a`]: optionA, [`q${i}b`]: optionB, [`q${i}c`]: optionC, [`q${i}d`]: optionD, [`correctOption${i}`]: correctOption } = req.body;
+            questions.push({
+                questionText,
+                options: {
+                    optionA,
+                    optionB,
+                    optionC,
+                    optionD
+                },
+                correctOption
+            });
+        }
+        await Quiz.insertMany(questions);
+        console.log('Quiz questions saved successfully:', questions);
+        res.send('Quiz questions saved successfully!');
+    } catch (error) {
+        console.error('Error saving quiz questions:', error);
+        res.status(500).send('Error saving quiz questions');
+    }
+});
+
+
+router.get('/CRUDstd', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/CRUDstd.html'));
+});
+
+router.get('/CRUDteacher', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/CRUDteacher.html'));
+});
+
+
+//CRUD OPERATIONS FOR STUDENT 
+router.get('/students', async (req, res) => {
+    try {
+        const students = await Student.find({});
+        res.json(students);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching students');
+    }
+});
+
+// Route to handle fetching a student by username
+router.get('/students/:username', async (req, res) => {
+    try {
+        const username = req.params.username;
+        const student = await Student.findOne({ username });
+        if (!student) {
+            res.status(404).send('Student not found');
+            return;
+        }
+        res.json(student);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching student');
+    }
+});
+
+// Route to handle updating a student
+router.put('/students/:username', async (req, res) => {
+    try {
+        const { fullname, email, password, birthdate } = req.body;
+        const currentStudent = await Student.findOne({ username: req.params.username });
+
+        // Construct the updated student object
+        const updatedStudent = {
+            fullname: fullname || currentStudent.fullname,
+            email: email || currentStudent.email,
+            password: password || currentStudent.password,
+            birthdate: birthdate ? new Date(birthdate) : currentStudent.birthdate,
+        };
+
+        await Student.findOneAndUpdate({ username: req.params.username }, updatedStudent);
+        res.status(200).send('Student updated successfully');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error updating student');
+    }
+});
+
+// Route to handle creating a student
+router.post('/students', async (req, res) => {
+    try {
+        console.log('Request Body:', req.body);
+        const { fullname, username, email, password, birthdate } = req.body;
+        const student = new Student({ fullname, username, email, password, birthdate });
+        await student.save();
+        console.log('Student created successfully');
+        res.status(201).send('Student created successfully');
+    } catch (error) {
+        console.error('Error creating student:', error);
+        res.status(500).send('Error creating student');
+    }
+});
+
+// Route to handle deleting a student
+router.delete('/students/:username', async (req, res) => {
+    try {
+        await Student.findOneAndDelete({ username: req.params.username });
+        res.status(200).send('Student deleted successfully');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error deleting student');
+    }
+});
+//--------------------------------------------------------
+
+// CRUD operations for teachers
+
+// Route to fetch all teachers
+router.get('/teachers', async (req, res) => {
+    try {
+        const teachers = await Teacher.find({});
+        res.json(teachers);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching teachers');
+    }
+});
+
+// Route to fetch a teacher by username
+router.get('/teachers/:username', async (req, res) => {
+    try {
+        const username = req.params.username;
+        const teacher = await Teacher.findOne({ username });
+        if (!teacher) {
+            res.status(404).send('Teacher not found');
+            return;
+        }
+        res.json(teacher);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching teacher');
+    }
+});
+
+// Route to update a teacher
+router.put('/teachers/:username', async (req, res) => {
+    try {
+        const { fullname, email, password, birthdate } = req.body;
+        const currentTeacher = await Teacher.findOne({ username: req.params.username });
+
+        // Construct the updated teacher object
+        const updatedTeacher = {
+            fullname: fullname || currentTeacher.fullname,
+            email: email || currentTeacher.email,
+            password: password || currentTeacher.password,
+            birthdate: birthdate ? new Date(birthdate) : currentTeacher.birthdate,
+        };
+
+        await Teacher.findOneAndUpdate({ username: req.params.username }, updatedTeacher);
+        res.status(200).send('Teacher updated successfully');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error updating teacher');
+    }
+});
+
+// Route to create a teacher
+router.post('/teachers', async (req, res) => {
+    try {
+        console.log('Request Body:', req.body);
+        const { fullname, username, email, password, birthdate } = req.body;
+        const teacher = new Teacher({ fullname, username, email, password, birthdate });
+        await teacher.save();
+        console.log('Teacher created successfully');
+        res.status(201).send('Teacher created successfully');
+    } catch (error) {
+        console.error('Error creating teacher:', error);
+        res.status(500).send('Error creating teacher');
+    }
+});
+
+// Route to delete a teacher
+router.delete('/teachers/:username', async (req, res) => {
+    try {
+        await Teacher.findOneAndDelete({ username: req.params.username });
+        res.status(200).send('Teacher deleted successfully');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error deleting teacher');
+    }
 });
 
 module.exports = router;
