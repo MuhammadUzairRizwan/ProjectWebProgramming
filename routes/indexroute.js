@@ -95,6 +95,18 @@ router.get('/Quiz', (req, res) => {
 router.get('/AddQuiz', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/AddQuiz.html'));
 });
+// Route for the studentdashboard
+router.get('/StudentDashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/StudentDashboard.html'));
+});
+// Route for the adddashboard
+router.get('/AdminDashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/AdminDashboard.html'));
+});
+// Route for the teachdashboard
+router.get('/TeacherDashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/TeacherDashboard.html'));
+});
 
 
 router.post('/addQuiz', async (req, res) => {
