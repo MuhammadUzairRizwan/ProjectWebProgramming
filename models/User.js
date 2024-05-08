@@ -52,3 +52,6 @@ const Teacher = mongoose.model('Teacher', teacherSchema);
 const Quiz = mongoose.model('Quiz', quizSchema);
 
 module.exports = { Admin, Student, Teacher, Quiz };
+
+
+

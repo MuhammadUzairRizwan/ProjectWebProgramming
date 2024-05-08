@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Create Quiz</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .navbar {
+            background-color: #3F1651 !important;
+        }
+        .navbar-brand {
+            color: #fff !important;
+        }
+        .navbar-nav .nav-item {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+        .navbar-nav .nav-link {
+            color: #fff !important;
+            border-radius: 20px;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+            background-color: #6C3C86; /* Background color */
+        }
+        .navbar-nav .nav-link:hover {
+            background-color: #563b76;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .question {
+            display: none; /* Initially hide all questions */
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        .question.active {
+            display: block; /* Show active question */
+        }
+        .question input[type="text"] {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .options label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .btn-next {
+            margin-top: 20px;
+            width: 100%;
+            background-color: #F89F5B;
+            border-color: #F89F5B;
+        }
+        .btn-next:hover {
+            background-color: #eb7922;
+            border-color: #eb7922;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
+    <div class="container-fluid">
+        <a href="#" class="navbar-brand">Examify</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link btn btn-outline-light" href="#">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-outline-light" href="#">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <h1>Create a Quiz</h1>
+    <form id="quizMakerForm">
+        <!-- Repeat the question block for each question -->
+        <div class="question active" id="question1">
+            <label for="question1">Question 1:</label>
+            <input type="text" id="question1" name="question1" class="form-control" required>
+            <div class="options">
+                <label for="q1a">Option A:</label>
+                <input type="text" id="q1a" name="q1a" class="form-control" required>
+                <label for="q1b">Option B:</label>
+                <input type="text" id="q1b" name="q1b" class="form-control" required>
+                <label for="q1c">Option C:</label>
+                <input type="text" id="q1c" name="q1c" class="form-control" required>
+                <label for="q1d">Option D:</label>
+                <input type="text" id="q1d" name="q1d" class="form-control" required>
+                <label for="correctOption1">Correct Option:</label>
+                <select id="correctOption1" name="correctOption1" class="form-control" required>
+                    <option value="a">Option A</option>
+                    <option value="b">Option B</option>
+                    <option value="c">Option C</option>
+                    <option value="d">Option D</option>
+                </select>
+            </div>
+        </div>
+        <!-- Repeat the block for questions 2 to 10 -->
+        <!-- Repeat the block for questions 2 to 10 -->
+
+
+        <button type="submit" class="btn btn-primary btn-next" onclick="submit()">Submit</button>
+    </form>
+</div>
+
+<script>
+var currentQuestion = 1;
+var totalQuestions = 10;
+
+function submit() {
+
+}
+</script>
+
+</body>
+</html>

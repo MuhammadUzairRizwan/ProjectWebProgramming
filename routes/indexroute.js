@@ -4,6 +4,18 @@ const router = express.Router();
 const { Admin, Student, Teacher,Quiz} = require('../models/User');
 
 
+// Route for the studentdashboard
+router.get('/StudentDashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/StudentDashboard.html'));
+});
+// Route for the adddashboard
+router.get('/AdminDashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/AdminDashboard.html'));
+});
+// Route for the teachdashboard
+router.get('/TeacherDashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/TeacherDashboard.html'));
+});
 
 
 // Route for the homepage
@@ -91,48 +103,60 @@ router.get('/verifyemail', (req, res) => {
 router.get('/Quiz', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/Quiz.html'));
 });
+
+// Route for the addtest
+router.get('/addtest', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/addtest.html'));
+});
 // Route for the AddQuiz
-router.get('/AddQuiz', (req, res) => {
-    res.sendFile(path.join(__dirname, '../views/AddQuiz.html'));
-});
-// Route for the studentdashboard
-router.get('/StudentDashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, '../views/StudentDashboard.html'));
-});
-// Route for the adddashboard
-router.get('/AdminDashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, '../views/AdminDashboard.html'));
-});
-// Route for the teachdashboard
-router.get('/TeacherDashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, '../views/TeacherDashboard.html'));
-});
+// router.get('/AddQuiz', (req, res) => {
+//     res.sendFile(path.join(__dirname, '../views/AddQuiz.html'));
+// });
 
-
-router.post('/addQuiz', async (req, res) => {
+router.post('/addtest', async (req, res) => {
     try {
-        const questions = [];
-        for (let i = 1; i <= 10; i++) {
-            const { [`question${i}`]: questionText, [`q${i}a`]: optionA, [`q${i}b`]: optionB, [`q${i}c`]: optionC, [`q${i}d`]: optionD, [`correctOption${i}`]: correctOption } = req.body;
-            questions.push({
-                questionText,
-                options: {
-                    optionA,
-                    optionB,
-                    optionC,
-                    optionD
-                },
-                correctOption
-            });
-        }
-        await Quiz.insertMany(questions);
-        console.log('Quiz questions saved successfully:', questions);
-        res.send('Quiz questions saved successfully!');
+        const { questionText, optionA, optionB, optionC, optionD, correctOption } = req.body;
+        const quiz = new Quiz({
+            questionText,
+            options: {
+                optionA,
+                optionB,
+                optionC,
+                optionD
+            },
+            correctOption
+        });
+        await quiz.save();
+        res.send('Quiz question saved successfully!');
     } catch (error) {
-        console.error('Error saving quiz questions:', error);
-        res.status(500).send('Error saving quiz questions');
+        console.error('Error saving quiz question:', error);
+        res.status(500).send('Error saving quiz question');
     }
 });
+// router.post('/addQuiz', async (req, res) => {
+//     try {
+//         const questions = [];
+//         for (let i = 1; i <= 10; i++) {
+//             const { [question${i}]: questionText, [q${i}a]: optionA, [q${i}b]: optionB, [q${i}c]: optionC, [q${i}d]: optionD, [correctOption${i}]: correctOption } = req.body;
+//             questions.push({
+//                 questionText,
+//                 options: {
+//                     optionA,
+//                     optionB,
+//                     optionC,
+//                     optionD
+//                 },
+//                 correctOption
+//             });
+//         }
+//         await Quiz.insertMany(questions);
+//         console.log('Quiz questions saved successfully:', questions);
+//         res.send('Quiz questions saved successfully!');
+//     } catch (error) {
+//         console.error('Error saving quiz questions:', error);
+//         res.status(500).send('Error saving quiz questions');
+//     }
+// });
 
 
 router.get('/CRUDstd', (req, res) => {
@@ -297,4 +321,4 @@ router.delete('/teachers/:username', async (req, res) => {
     }
 });
 
-module.exports = router;
+module.exports = router;
