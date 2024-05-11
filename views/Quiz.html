@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
-        body {
+         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
         }
@@ -76,8 +76,7 @@
     </style>
 </head>
 <body>
-
-<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
+    <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
         <div class="container-fluid">
             <a href="#" class="navbar-brand">Examify</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
@@ -94,66 +93,63 @@
                 </ul>
             </div>
         </div>
-</nav>
+    </nav>
+    <div class="container">
+        <h1>Quiz</h1>
+        <form id="quizForm">
+            <!-- Questions will be dynamically populated here -->
+        </form>
+        <div id="result" class="result"></div>
+    </div>
+    <footer>
+        &copy; 2024 Examify. All rights reserved.
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    // Fetch 10 random questions from the server
+    fetch('/quiz')
+    .then(response => response.json())
+    .then(questions => {
+        const quizForm = document.getElementById('quizForm');
+        questions.forEach((question, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+            questionDiv.innerHTML = `
+                <p>${index + 1}. ${question.questionText}</p>
+                <div class="options">
+                    <label><input type="radio" name="q${index}" value="a"> a) ${question.options.optionA}</label>
+                    <label><input type="radio" name="q${index}" value="b"> b) ${question.options.optionB}</label>
+                    <label><input type="radio" name="q${index}" value="c"> c) ${question.options.optionC}</label>
+                    <label><input type="radio" name="q${index}" value="d"> d) ${question.options.optionD}</label>
+                </div>`;
+            quizForm.appendChild(questionDiv);
+        });
+    });
 
-<div class="container">
-    <h1>Quiz</h1>
-    <form id="quizForm">
-        <div class="question">
-            <p>1. What is the capital of France?</p>
-            <div class="options">
-                <label><input type="radio" name="q1" value="a"> a) London</label>
-                <label><input type="radio" name="q1" value="b"> b) Paris</label>
-                <label><input type="radio" name="q1" value="c"> c) Rome</label>
-            </div>
-        </div>
-        <div class="question">
-            <p>2. Who is the president of the United States?</p>
-            <div class="options">
-                <label><input type="radio" name="q2" value="a"> a) Barack Obama</label>
-                <label><input type="radio" name="q2" value="b"> b) Donald Trump</label>
-                <label><input type="radio" name="q2" value="c"> c) Joe Biden</label>
-            </div>
-        </div>
-        <div class="question">
-            <p>3. What is the capital of Japan?</p>
-            <div class="options">
-                <label><input type="radio" name="q3" value="a"> a) Tokyo</label>
-                <label><input type="radio" name="q3" value="b"> b) Beijing</label>
-                <label><input type="radio" name="q3" value="c"> c) Seoul</label>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary btn-submit">Submit Quiz</button>
-    </form>
-    <div id="result" class="result"></div>
-</div>
+    // Handle form submission
+    document.getElementById('quizMakerForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        var score = 0;
+        var correctChoices = []; // Array to store correct choices
 
-<footer>
-    &copy; 2024 Examify. All rights reserved.
-</footer>
+        const formData = new FormData(this);
+        formData.forEach((value, key) => {
+            const questionIndex = key.substr(1); // Extract question index from input name
+            if (value === correctChoices[questionIndex]) {
+                score++;
+            }
+        });
 
-<script>
-document.getElementById('quizForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    
-    var score = 0;
-    var answers = {
-        'q1': 'b',
-        'q2': 'c',
-        'q3': 'a'
-    };
-
-    var formData = new FormData(this);
-    for (var pair of formData.entries()) {
-        if (answers[pair[0]] === pair[1]) {
-            score++;
-        }
-    }
-
-    var resultElement = document.getElementById('result');
-    resultElement.innerHTML = 'You scored ' + score + ' out of ' + Object.keys(answers).length;
+        // Display result
+        const resultElement = document.getElementById('result');
+        resultElement.innerHTML = `You scored ${score} out of 10`;
+    });
 });
-</script>
 
+    </script>
+    
 </body>
 </html>
