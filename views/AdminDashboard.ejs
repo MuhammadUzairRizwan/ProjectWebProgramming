@@ -258,8 +258,8 @@ footer {
 
     </center>
 
-    <a href="/admin-dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-    <a href="/admin-teacher"><i class="fas fa-chalkboard-teacher"></i><span>Teacher</span></a>
+    <a id="admindashboard" href="#"><i class="fas fa-user-graduate"></i><span>Dashboard</span></a>
+    <a id="TeacherLink" href="#"><i class="fas fa-user-graduate"></i><span>Teacher</span></a>
     <a id="studentLink" href="#"><i class="fas fa-user-graduate"></i><span>Student</span></a>
     <a href="/admin-course"><i class="fas fa-book"></i><span>Courses</span></a>
     <a href="/admin-question"><i class="fas fa-question-circle"></i><span>Questions</span></a>
@@ -267,8 +267,10 @@ footer {
 
 
   </div>
+
   <!--sidebar end-->
   <br><br>
+
   <div class="container" id="mainContent">
     <div class="container custom-card-container"style="margin-left: 270px;>
       <div class="row justify-content-end">
@@ -318,9 +320,15 @@ footer {
 <br><br><br><br><br><br><br><br><br><br>
 
 
-<div id = "crud">
+<div id = "crudteacher" style="width: 70%;height: 80%;margin-bottom: 10%;margin-left: 20%;">
+  <%- include('CRUDteacher'); %>
+</div>
+
+
+<div id = "crud" style="width: 70%;height: 80%;margin-bottom: 10%;margin-left: 20%;">
   <%- include('CRUDstd'); %>
 </div>
+
 
 
 <script src="http://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
@@ -342,21 +350,75 @@ footer {
   <!--content end-->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      // Get the student button
-      var studentButton = document.getElementById('studentLink');
-  
+      // Get the student link
+      var studentLink = document.getElementById('studentLink');
+      var admindash = document.getElementById('admindashboard');
+      var TeacherLink = document.getElementById('TeacherLink');
+
+
+
       // Get the mainContent div
       var mainContent = document.getElementById('mainContent');
-      // Add click event listener to the student button
-      studentButton.addEventListener('click', function () {
-        // Remove the mainContent div
+      
+      // Get the CRUD container
+      var crudContainer = document.getElementById('crud');
+      var crudteacher = document.getElementById('crudteacher');
+
+      if (crudContainer) {
+          crudContainer.style.display = 'none';
+        }
+
+        
+      if (crudteacher) {
+        crudteacher.style.display = 'none';
+        }
+
+        TeacherLink.addEventListener('click', function () {
+        // Hide the mainContent div
         if (mainContent) {
-          mainContent.parentNode.removeChild(mainContent);
+          mainContent.style.display = 'none';
+        }
+        if (crudteacher) {
+        crudteacher.style.display = 'block';
+        }
+        // Show the CRUD container
+        if (crudContainer) {
+          crudContainer.style.display = 'none';
+        }
+      });  
+      // Add click event listener to the student link
+      studentLink.addEventListener('click', function () {
+        // Hide the mainContent div
+        if (crudContainer) {
+          crudContainer.style.display = 'block';
+        }
+
+        if (mainContent) {
+          mainContent.style.display = 'none';
+        }
+        if (crudteacher) {
+        crudteacher.style.display = 'none';
+        }
+        // Show the CRUD container
+        
+      });
+
+
+      admindash.addEventListener('click', function () {
+        // Hide the mainContent div
+        if (mainContent) {
+          mainContent.style.display = 'block';
+        }
+        if (crudteacher) {
+        crudteacher.style.display = 'none';
+        }
+        // Show the CRUD container
+        if (crudContainer) {
+          crudContainer.style.display = 'none';
         }
       });
     });
   </script>
-  
     
 </body>
 
