@@ -142,12 +142,10 @@ router.post('/addtest', async (req, res) => {
         for (let i = 0; i < questionText.length; i++) {
             const quiz = new Quiz({
                 questionText: questionText[i],
-                options: {
-                    optionA: optionA[i],
-                    optionB: optionB[i],
-                    optionC: optionC[i],
-                    optionD: optionD[i]
-                },
+                optionA: optionA[i],
+                optionB: optionB[i],
+                optionC: optionC[i],
+                optionD: optionD[i],
                 correctOption: correctOption[i]
             });
             await quiz.save();

@@ -32,15 +32,27 @@ const quizSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    options: {
-        type: {
-            optionA: String,
-            optionB: String,
-            optionC: String,
-            optionD: String
-        },
+
+    optionA: {
+        type: String,
         required: true
     },
+
+    optionB: {
+        type: String,
+        required: true
+    },
+
+    optionC: {
+        type: String,
+        required: true
+    },
+
+    optionD: {
+        type: String,
+        required: true
+    },
+    
     correctOption: {
         type: String,
         enum: ['optionA', 'optionB', 'optionC', 'optionD'],
