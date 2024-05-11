@@ -116,23 +116,40 @@ router.get('/addtest', (req, res) => {
 router.post('/addtest', async (req, res) => {
     try {
         const { questionText, optionA, optionB, optionC, optionD, correctOption } = req.body;
-        const quiz = new Quiz({
-            questionText,
-            options: {
-                optionA,
-                optionB,
-                optionC,
-                optionD
-            },
-            correctOption
-        });
-        await quiz.save();
-        res.send('Quiz question saved successfully!');
+
+        // Iterate through the arrays and save each question
+        for (let i = 0; i < questionText.length; i++) {
+            const quiz = new Quiz({
+                questionText: questionText[i],
+                options: {
+                    optionA: optionA[i],
+                    optionB: optionB[i],
+                    optionC: optionC[i],
+                    optionD: optionD[i]
+                },
+                correctOption: correctOption[i]
+            });
+            await quiz.save();
+        }
+
+        res.send('Quiz questions saved successfully!');
     } catch (error) {
-        console.error('Error saving quiz question:', error);
-        res.status(500).send('Error saving quiz question');
+        console.error('Error saving quiz questions:', error);
+        res.status(500).send('Error saving quiz questions');
     }
 });
+
+router.get('/Quiz', async (req, res) => {
+    try {
+        // Fetch 10 random questions from the database
+        const questions = await Quiz.aggregate([{ $sample: { size: 10 } }]);
+        res.json(questions);
+    } catch (error) {
+        console.error('Error fetching questions:', error);
+        res.status(500).send('Error fetching questions');
+    }
+});
+
 // router.post('/addQuiz', async (req, res) => {
 //     try {
 //         const questions = [];
