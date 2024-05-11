@@ -31,7 +31,7 @@ router.get('/signup', (req, res) => {
 // POST request to handle form submission and create user
 router.post('/signup', async (req, res) => {
     const { fullname, username, email, password, birthdate, user } = req.body;
-    
+
     try {
         let userModel;
         switch (user) {
@@ -47,13 +47,14 @@ router.post('/signup', async (req, res) => {
             default:
                 return res.status(400).json({ message: 'Invalid user type' });
         }
-        
+
         const newUser = new userModel({
             fullname,
             username,
             email,
             password,
-            birthdate
+            birthdate,
+            userType: user // Include the userType field here
         });
 
         await newUser.save();
@@ -71,6 +72,7 @@ router.get('/login', (req, res) => {
 
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
+    let userType = null;
 
     try {
         // Check if the username exists in any of the user types
@@ -78,18 +80,37 @@ router.post('/login', async (req, res) => {
         const student = await Student.findOne({ username, password });
         const teacher = await Teacher.findOne({ username, password });
 
-        // If user exists in any type, send success response
-        if (admin || student || teacher) {
-            res.status(200).json({ message: 'Login successful' });
+        // Check which user type exists and set the userType accordingly
+        if (admin) {
+            userType = 'admin';
+        } else if (student) {
+            userType = 'student';
+        } else if (teacher) {
+            userType = 'teacher';
+        }
+        // If user exists in any type, redirect to respective dashboard
+        if (userType) {
+            // Redirect based on userType
+            switch (userType) {
+                case 'admin':
+                    res.redirect('/AdminDashboard');
+                    break;
+                case 'student':
+                    res.redirect('/StudentDashboard');
+                    break;
+                case 'teacher':
+                    res.redirect('/TeacherDashboard');
+                    break;
+                default:
+                    res.status(403).json({ message: 'Unauthorized user type' });
+            }
         } else {
             res.status(401).json({ message: 'Incorrect username or password' });
-            res.redirect('/login');
-
         }
     } catch (error) {
         console.error('Error logging in:', error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
+        res.status(500).json({ message: 'Internal server error'});
+}
 });
 // Route for the ForgotPasswordPage
 router.get('/ForgotPassword', (req, res) => {
