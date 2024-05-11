@@ -121,7 +121,7 @@ input[type="submit"]:hover {
     <img src="https://successful-cyan-spider.cyclic.app/public/images/undraw/programmer.gif" alt="men" class="men">
     
     <div class="container">
-        <form id="signupForm" action="/signup" method="POST">
+        <form id="signupForm" action="/signup" method="POST" onsubmit="return validateForm()">
             <input type="text" id="fullname" name="fullname" placeholder="Full Name" required>
             <input type="text" id="username" name="username" placeholder="User Name" required>
             <input type="email" id="email" name="email" placeholder="Email Address" required>
@@ -129,17 +129,15 @@ input[type="submit"]:hover {
             <input type="date" id="birthdate" name="birthdate" required>
             <select id="user" name="user" required>
                 <option value="" disabled selected>Select user</option>
-                <option value="admin">admin</option>
-                <option value="student">student</option>
-                <option value="teacher">teacher</option>
+                <option value="admin">Admin</option>
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
             </select>
-            <a href="verifyemail"><input type="submit" value="Sign Up" ></a>
+            <input type="submit" value="Sign Up">
         </form>
         <p class="text-center">Already have an account? <a href="login">Log in here</a></p>
     </div>
 </div>
-
-
 
 <script>
 function validateForm() {
@@ -148,12 +146,11 @@ function validateForm() {
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
     var birthdate = document.getElementById("birthdate").value;
-    var gender = document.getElementById("gender").value;
+    var user = document.getElementById("user").value;
 
     var emailRegex = /\S+@\S+\.\S+/;
-    var phoneRegex = /^[0-9]+$/;
-
-    if (fullname == "" || username == "" || email == "" || password == "" || birthdate == "" || gender == "" || phone == "" || zipcode == "" || country == "") {
+    
+    if (fullname === "" || username === "" || email === "" || password === "" || birthdate === "" || user === "") {
         alert("All fields are required");
         return false;
     }
@@ -163,14 +160,10 @@ function validateForm() {
         return false;
     }
 
-    if (!phoneRegex.test(phone)) {
-        alert("Invalid phone number");
-        return false;
-    }
-
     return true;
 }
 </script>
+
 
 </body>
 </html>

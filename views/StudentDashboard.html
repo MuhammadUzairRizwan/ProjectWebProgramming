@@ -288,19 +288,19 @@
   <!--sidebar start-->
   <div class="sidebar">
     <center>
-
-      <img src="images/student.png" class="profile_image" alt="">
-      <h4>{{request.user.first_name}}</h4>
-      <h6 style="color: rgb(255, 255, 255);">( Student )</h6>
-
+        <label for="profile_image">
+            <img id="preview_image" src="images/student.png" class="profile_image" alt="">
+            <h4>{{ studentName }}</h4>
+            <h6 style="color: rgb(255, 255, 255);">( Student )</h6>
+        </label>
+        <input type="file" id="profile_image" style="display: none;" accept="image/*" onchange="previewImage(event)">
     </center>
 
     <a href="/student/student-dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
     <a href="/student/student-exam"><i class="fas fa-book"></i><span>Exam</span></a>
     <a href="/student/student-marks"><i class="fas fa-sort-numeric-up"></i><span>Marks</span></a>
-  </div>
-  <!--sidebar end-->
-
+</div>
+<!--sidebar end-->
 
   <br><br>
   <div class="container" style="margin-left: 370px;">
@@ -351,6 +351,28 @@
 </footer>
 
   <!--content end-->
+  <script>
+// Check if there is a stored image URL in session storage
+var storedImageURL = sessionStorage.getItem('profile_image');
+if (storedImageURL) {
+    // If a stored image URL exists, set it as the source of the profile image
+    document.getElementById('preview_image').src = storedImageURL;
+}
+
+function previewImage(event) {
+    var reader = new FileReader();
+    reader.onload = function(){
+        var output = document.getElementById('preview_image');
+        output.src = reader.result;
+
+        // Store the image URL in session storage
+        sessionStorage.setItem('profile_image', reader.result);
+    };
+    reader.readAsDataURL(event.target.files[0]);
+}
+
+    
+  </script>
 </body>
 
 </html>

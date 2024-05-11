@@ -5,7 +5,8 @@ const adminSchema = new mongoose.Schema({
     username: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
-    birthdate: { type: Date, required: true }
+    birthdate: { type: Date, required: true },
+    userType: { type: String, enum: ['admin'], required: true, default: 'admin' } // Default to 'admin' for admin users
 });
 
 const studentSchema = new mongoose.Schema({
@@ -13,7 +14,8 @@ const studentSchema = new mongoose.Schema({
     username: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
-    birthdate: { type: Date, required: true }
+    birthdate: { type: Date, required: true },
+    userType: { type: String, enum: ['student'], required: true, default: 'student' } // Default to 'student' for student users
 });
 
 const teacherSchema = new mongoose.Schema({
@@ -21,9 +23,9 @@ const teacherSchema = new mongoose.Schema({
     username: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
-    birthdate: { type: Date, required: true }
+    birthdate: { type: Date, required: true },
+    userType: { type: String, enum: ['teacher'], required: true, default: 'teacher' } // Default to 'teacher' for teacher users
 });
-
 
 const quizSchema = new mongoose.Schema({
     questionText: {
@@ -52,6 +54,3 @@ const Teacher = mongoose.model('Teacher', teacherSchema);
 const Quiz = mongoose.model('Quiz', quizSchema);
 
 module.exports = { Admin, Student, Teacher, Quiz };
-
-
-
