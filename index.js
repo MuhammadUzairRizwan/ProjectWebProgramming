@@ -7,6 +7,12 @@ const PORT = process.env.PORT || 3000;
 const MONGODB_URI = 'mongodb://localhost:27017/Examify'; // Your MongoDB URI with database name
 const app = express();
 
+// set the view engine to ejs
+app.set('view engine', 'ejs');
+
+
+
+
 // Connect to MongoDB
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
@@ -21,6 +27,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/', indexRoute);
+
+// about page
+app.get('/AdminDashboard', function(req, res) {
+    res.render('AdminDashboard');
+  });
+
+
 
 // Start the server
 app.listen(PORT, () => {

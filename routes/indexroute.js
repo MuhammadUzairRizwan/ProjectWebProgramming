@@ -9,8 +9,8 @@ router.get('/StudentDashboard', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/StudentDashboard.html'));
 });
 // Route for the adddashboard
-router.get('/AdminDashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, '../views/AdminDashboard.html'));
+router.get("/AdminDashboard", (req, res)=>{
+    return res.render("AdminDashboard");
 });
 // Route for the teachdashboard
 router.get('/TeacherDashboard', (req, res) => {
