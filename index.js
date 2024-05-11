@@ -32,7 +32,9 @@ app.use('/', indexRoute);
 app.get('/AdminDashboard', function(req, res) {
     res.render('AdminDashboard');
   });
-
+app.get('/TeacherDashboard', function(req, res) {
+    res.render('TeacherDashboard');
+  });
 
 
 // Start the server

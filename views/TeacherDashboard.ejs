@@ -131,17 +131,19 @@
     }
 
     .content {
-      margin-left: 250px;
+      margin-left: 250px; /* Adjusted margin-left value */
+      margin-top: 70px; /* Added margin-top to match the height of the header */
       background: url(background.png) no-repeat;
       background-position: center;
       background-size: cover;
-      height: 100vh;
+      height: calc(100vh - 70px); /* Subtracted the height of the header from the viewport height */
       transition: 0.5s;
     }
-
+    
     #check:checked~.content {
       margin-left: 60px;
     }
+    
 
     #check {
       display: none;
@@ -258,8 +260,8 @@ footer {
 
     </center>
 
-    <a href="/admin-dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-    <a href="/student/student-exam"><i class="fas fa-book"></i><span>Exam</span></a>
+    <a id="dashboard" href="#"><i class="fas fa-user-graduate"></i><span>Dashboard</span></a>
+    <a id="studentLink" href="#"><i class="fas fa-user-graduate"></i><span>Add Quiz</span></a>
     <a href="/admin-question"><i class="fas fa-question-circle"></i><span>Questions</span></a>
     
 
@@ -267,9 +269,10 @@ footer {
   </div>
   <!--sidebar end-->
   <br><br>
-  <div class="container" ">
-    <div class="container custom-card-container"style="margin-left:400px;>
-      <div class="row justify-content-end">
+  <div class="container" id="mainContent" style=" width: 70%;height: 80%;margin-bottom: 10%;margin-left: 20%; margin-top:10%" >
+    <%- include('CRUDstd'); %>
+    <!-- <div class="container custom-card-container" style="margin-left:400px;">
+      <div class = "row justify-content-end">
         <div class="col-md-8 col-xl-10">
           <div class="row" style="display:flex; margin-top:175px" >
             <div class="col-md-6 custom-card" style="margin-right:35px;">
@@ -280,7 +283,7 @@ footer {
                     </div>  
                  </div>
             </div>
-            <div class="col-md-6 custom-card"style="margin-right:35px;"> <!-- Adjusted column size and added custom class -->
+            <div class="col-md-6 custom-card"style="margin-right:35px;"> 
                 <div class="card bg-c-yellow order-card">
                     <div class="card-block">
                       <h6 class="m-b-20">Total Exams</h6>
@@ -289,7 +292,7 @@ footer {
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 custom-card"style="margin-right:35px;"> <!-- Adjusted column size and added custom class -->
+            <div class="col-md-6 custom-card"style="margin-right:35px;"> 
                 <div class="card bg-c-pink order-card">
                     <div class="card-block">
                       <h6 class="m-b-20">Total Questions</h6>
@@ -301,14 +304,16 @@ footer {
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </div> 
 <br><br><br><br><br><br><br><br><br><br>
 
-
+<div id = "crud" style="width: 70%;margin-bottom: 30%;margin-left: 20%;">
+  <%- include('addtest'); %>
+</div>
 
 <script src="http://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
-  <footer>
+  <!-- <footer>
 
     <br>
     <div class="container">
@@ -321,9 +326,51 @@ footer {
         </div>
       </div>
     </div>
-  </footer>
+  </footer> -->
   
   <!--content end-->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () 
+    {
+      // Get the student link
+      var studentLink = document.getElementById('studentLink');
+      var dashboard = document.getElementById('dashboard');
+
+  
+      // Get the mainContent div
+      var mainContent = document.getElementById('mainContent');
+      
+      // Get the CRUD container
+      var crudContainer = document.getElementById('crud');
+     
+      if (crudContainer) {
+          crudContainer.style.display = 'none';
+        }
+ 
+      // Add click event listener to the student link
+      studentLink.addEventListener('click', function () {
+        // Hide the mainContent div
+        if (crudContainer) {
+          crudContainer.style.display = 'block';
+        }
+
+        if (mainContent) {
+          mainContent.style.display = 'none';
+        }
+      });
+
+        dashboard.addEventListener('click', function () {
+          // Hide the mainContent div
+          if (crudContainer) {
+            crudContainer.style.display = 'none';
+          }
+  
+          if (mainContent) {
+            mainContent.style.display = 'block';
+          }
+      });
+    });  
+  </script>  
 </body>
 
 </html>
