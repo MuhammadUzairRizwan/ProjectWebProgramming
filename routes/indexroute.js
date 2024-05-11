@@ -357,4 +357,35 @@ router.delete('/teachers/:username', async (req, res) => {
     }
 });
 
+
+router.get('/quizzes', async (req, res) => {
+    try {
+        // Retrieve all quiz questions from the database
+        const quizQuestions = await Quiz.find({}, 'questionText optionA optionB optionC optionD').limit(10);
+
+        // Send the quiz questions as response
+        res.json(quizQuestions);
+    } catch (error) {
+        console.error('Error fetching quiz questions:', error);
+        res.status(500).send('Error fetching quiz questions');
+    }
+});
+
+
+router.get('/quizzes/:id', async (req, res) => {
+    try {
+        const questionId = req.params.id;
+        // Retrieve the question from the database by its ID
+        const quizQuestion = await Quiz.findById(questionId);
+
+        // Send the correct option for the question as response
+        res.json({ correctOption: quizQuestion.correctOption });
+    } catch (error) {
+        console.error('Error fetching quiz question:', error);
+        res.status(500).send('Error fetching quiz question');
+    }
+});
+
+
+
 module.exports = router;

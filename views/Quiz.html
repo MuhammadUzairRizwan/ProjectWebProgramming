@@ -1,155 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Quiz</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>Quiz Sheet</title>
     <style>
-         body {
+        body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
-        .navbar {
-            background-color: #3F1651 !important;
-        }
-        .navbar-brand {
-            color: #fff !important;
-        }
-        .navbar-nav .nav-item {
-            margin-left: 10px;
-            margin-right: 10px;
-        }
-        .navbar-nav .nav-link {
-            color: #fff !important;
-            border-radius: 20px;
-            padding: 10px 20px;
-            transition: background-color 0.3s;
-            background-color: #6C3C86; /* Background color */
-        }
-        .navbar-nav .nav-link:hover {
-            background-color: #563b76;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
+            margin: 0;
             padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        h1 {
-            text-align: center;
-        }
-        .question {
+        .quiz-question {
             margin-bottom: 20px;
         }
-        .options label {
-            display: block;
-            margin-bottom: 10px;
+        .question-text {
+            font-weight: bold;
         }
-        .btn-submit {
+        .options {
+            margin-left: 20px;
+        }
+        .submit-btn {
             margin-top: 20px;
-            width: 100%;
-            background-color: #F89F5B;
-            border-color: #F89F5B;
-        }
-        .btn-submit:hover {
-            background-color: #eb7922;
-            border-color: #eb7922;
-        }
-        .result {
-            text-align: center;
-            margin-top: 20px;
-            color: #3F1651;
-        }
-        footer {
-            text-align: center;
-            margin-top: 20px;
-            padding: 10px 0;
-            background-color: #3F1651;
-            color: #fff;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
-        <div class="container-fluid">
-            <a href="#" class="navbar-brand">Examify</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-outline-light" href="#">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-outline-light" href="#">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div class="container">
-        <h1>Quiz</h1>
-        <form id="quizForm">
-            <!-- Questions will be dynamically populated here -->
-        </form>
-        <div id="result" class="result"></div>
-    </div>
-    <footer>
-        &copy; 2024 Examify. All rights reserved.
-    </footer>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <h1>Quiz Sheet</h1>
+    <div id="quiz-container"></div>
+    <button class="submit-btn" onclick="submitQuiz()">Submit Quiz</button>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-    // Fetch 10 random questions from the server
-    fetch('/quiz')
-    .then(response => response.json())
-    .then(questions => {
-        const quizForm = document.getElementById('quizForm');
-        questions.forEach((question, index) => {
-            const questionDiv = document.createElement('div');
-            questionDiv.classList.add('question');
-            questionDiv.innerHTML = `
-                <p>${index + 1}. ${question.questionText}</p>
-                <div class="options">
-                    <label><input type="radio" name="q${index}" value="a"> a) ${question.options.optionA}</label>
-                    <label><input type="radio" name="q${index}" value="b"> b) ${question.options.optionB}</label>
-                    <label><input type="radio" name="q${index}" value="c"> c) ${question.options.optionC}</label>
-                    <label><input type="radio" name="q${index}" value="d"> d) ${question.options.optionD}</label>
-                </div>`;
-            quizForm.appendChild(questionDiv);
-        });
-    });
+        let correctAnswers = 0;
 
-    // Handle form submission
-    document.getElementById('quizMakerForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        
-        var score = 0;
-        var correctChoices = []; // Array to store correct choices
+        // Function to fetch quiz questions from the server and display them
+        async function fetchQuizQuestions() {
+            try {
+                const response = await fetch('/quizzes');
+                const quizQuestions = await response.json();
+                const quizContainer = document.getElementById('quiz-container');
 
-        const formData = new FormData(this);
-        formData.forEach((value, key) => {
-            const questionIndex = key.substr(1); // Extract question index from input name
-            if (value === correctChoices[questionIndex]) {
-                score++;
+                quizQuestions.forEach(question => {
+                    const questionDiv = document.createElement('div');
+                    questionDiv.classList.add('quiz-question');
+
+                    const questionText = document.createElement('p');
+                    questionText.classList.add('question-text');
+                    questionText.textContent = question.questionText;
+                    questionDiv.appendChild(questionText);
+
+                    const optionsList = document.createElement('ul');
+                    optionsList.classList.add('options');
+                    ['A', 'B', 'C', 'D'].forEach(optionKey => {
+                        const optionItem = document.createElement('li');
+                        const optionLabel = document.createElement('label');
+                        optionLabel.textContent = `${optionKey}: ${question['option' + optionKey]}`;
+
+                        const optionRadio = document.createElement('input');
+                        optionRadio.setAttribute('type', 'radio');
+                        optionRadio.setAttribute('name', question._id); // Use question ID as the radio button group name
+                        optionRadio.setAttribute('value', optionKey);
+                        optionLabel.prepend(optionRadio);
+                        optionItem.appendChild(optionLabel);
+
+                        optionsList.appendChild(optionItem);
+                    });
+                    questionDiv.appendChild(optionsList);
+
+                    quizContainer.appendChild(questionDiv);
+                });
+            } catch (error) {
+                console.error('Error fetching quiz questions:', error);
+                alert('Error fetching quiz questions');
             }
-        });
+        }
 
-        // Display result
-        const resultElement = document.getElementById('result');
-        resultElement.innerHTML = `You scored ${score} out of 10`;
-    });
-});
+        // Function to submit the quiz
+        async function submitQuiz() {
+            const quizQuestions = document.querySelectorAll('.quiz-question');
+            correctAnswers = 0;
 
+            for (let i = 0; i < 10; i++) {
+                const questionDiv = quizQuestions[i];
+                const selectedOption = questionDiv.querySelector('input[type="radio"]:checked');
+                if (selectedOption) {
+                    const questionId = selectedOption.getAttribute('name');
+                    const correctOption = await checkAnswer(questionId);
+                    selectedOption.value='option'+selectedOption.value;
+                    if (correctOption === selectedOption.value) {
+                        correctAnswers++;
+                    }
+                }
+            }
+
+            alert(`You answered ${correctAnswers} questions correctly out of ${quizQuestions.length}.`);
+        }
+
+        // Function to check the correct option for a given question
+        async function checkAnswer(questionId) {
+            try {
+                const response = await fetch(`/quizzes/${questionId}`);
+                const questionData = await response.json();
+                console.log(`Question Data for ID ${questionId}:`, questionData);
+                return questionData.correctOption;
+            } catch (error) {
+                console.error('Error checking answer:', error);
+                return ''; // Return an empty string if an error occurs
+            }
+        }
+
+        // Fetch quiz questions when the page loads
+        window.onload = fetchQuizQuestions;
     </script>
-    
 </body>
 </html>
