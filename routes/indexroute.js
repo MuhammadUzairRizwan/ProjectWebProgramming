@@ -5,15 +5,18 @@ const { Admin, Student, Teacher,Quiz} = require('../models/User');
 
 
 // Route for the studentdashboard
-router.get('/StudentDashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, '../views/StudentDashboard.html'));
-});
+// router.get('/StudentDashboard', (req, res) => {
+//     res.sendFile(path.join(__dirname, '../views/StudentDashboard.html'));
+// });
 // Route for the adddashboard
 router.get("/AdminDashboard", (req, res)=>{
     return res.render("AdminDashboard");
 });
 router.get("/TeacherDashboard", (req, res)=>{
     return res.render("TeacherDashboard");
+});
+router.get("/StudentDashboard", (req, res)=>{
+    return res.render("StudentDashboard");
 });
 
 

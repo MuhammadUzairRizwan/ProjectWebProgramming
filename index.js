@@ -35,6 +35,9 @@ app.get('/AdminDashboard', function(req, res) {
 app.get('/TeacherDashboard', function(req, res) {
     res.render('TeacherDashboard');
   });
+  app.get('/StudentDashboard', function(req, res) {
+    res.render('StudentDashboard');
+  });
 
 
 // Start the server

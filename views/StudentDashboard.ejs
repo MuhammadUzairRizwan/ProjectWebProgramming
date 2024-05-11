@@ -296,15 +296,15 @@
         <input type="file" id="profile_image" style="display: none;" accept="image/*" onchange="previewImage(event)">
     </center>
 
-    <a href="/student/student-dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-    <a href="/student/student-exam"><i class="fas fa-book"></i><span>Exam</span></a>
+    <a id="admindashboard" href="#"><i class="fas fa-user-graduate"></i><span>Dashboard</span></a>
+    <a id="studentLink" href="#"><i class="fas fa-user-graduate"></i><span>Exam</span></a>
     <a href="/student/student-marks"><i class="fas fa-sort-numeric-up"></i><span>Marks</span></a>
 </div>
 <!--sidebar end-->
 
   <br><br>
-  <div class="container" style="margin-left: 370px;">
-    <div class="container custom-card-container">
+  <div class="container" id="mainContent" style="margin-left: 370px;margin-top: 20%;">
+    <!-- <div class="container custom-card-container">
       <div class="row justify-content-end">
         <div class="col-md-8 col-xl-10">
           <div class="row" style="display:flex;">
@@ -316,7 +316,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-6 custom-card"> <!-- Adjusted column size and added custom class -->
+            <div class="col-md-6 custom-card"> 
               <div class="card bg-c-pink order-card">
                 <div class="card-block" style="margin-right:150px;">
                   <h6 class="m-b-20">Total Questions</h6>
@@ -327,15 +327,17 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
-  
+  <div id = "crud" style="margin-top: 5%;" >
+    <%- include('Quiz'); %>
+  </div>
 
   <br><br><br><br>
 
   <script src="http://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
     
-<footer>
+<!-- <footer>
 
   <br>
   <div class="container">
@@ -348,7 +350,7 @@
       </div>
     </div>
   </div>
-</footer>
+</footer> -->
 
   <!--content end-->
   <script>
@@ -373,6 +375,56 @@ function previewImage(event) {
 
     
   </script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Get the student link
+    var studentLink = document.getElementById('studentLink');
+    var admindash = document.getElementById('admindashboard');
+
+
+
+    // Get the mainContent div
+    var mainContent = document.getElementById('mainContent');
+    
+    // Get the CRUD container
+    var crudContainer = document.getElementById('crud');
+
+    if (crudContainer) {
+        crudContainer.style.display = 'none';
+      }
+
+      
+       
+      admindash.addEventListener('click', function () {
+        // Hide the mainContent div
+        if (mainContent) {
+          mainContent.style.display = 'block';
+        }
+          // Show the CRUD container
+        if (crudContainer) {
+          crudContainer.style.display = 'none';
+        }
+      });  
+    // Add click event listener to the student link
+    studentLink.addEventListener('click', function () {
+      // Hide the mainContent div
+      if (crudContainer) {
+        crudContainer.style.display = 'block';
+      }
+
+      if (mainContent) {
+        mainContent.style.display = 'none';
+      }
+    
+      // Show the CRUD container
+      
+    });
+
+
+  });
+</script>
+
 </body>
 
 </html>
