@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
-         body {
+        /* Your CSS styles */
+        body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
         }
@@ -83,53 +84,55 @@
             width: 100%;
             bottom: 0;
         }
+
     </style>
 </head>
 <body>
-    <!-- <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
-        <div class="container-fluid">
-            <a href="#" class="navbar-brand">Examify</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-outline-light" href="#">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-outline-light" href="#">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav> -->
+    
+    <div class="container">
+        <div id="div1"></div>
+        <div id="div2"></div>
+        <div id="div3"></div>
+    </div>
+
     <div class="container">
         <!-- <h1>Quiz</h1> -->
         <div id="quiz-container"></div>
         <button type="submit" class="btn btn-primary btn-next" onclick="submitQuiz()"">Submit</button>
         <div id="result" class="result"></div>
     </div>
-    <!-- <footer>
-        &copy; 2024 Examify. All rights reserved.
-    </footer> -->
+<br><br><br>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+       
+          <li id="TeacherLink1" class="page-item"><a class="page-link" href="#">1</a></li>
+          <li id="TeacherLink2" class="page-item"><a class="page-link" href="#">2</a></li>
+          <li id="TeacherLink3" class="page-item"><a class="page-link" href="#">3</a></li>
+         
+        </ul>
+      </nav>
+
+      
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     
     <script>
         let correctAnswers = 0;
 
-        // Function to fetch quiz questions from the server and display them
         async function fetchQuizQuestions() {
             try {
                 const response = await fetch('/quizzes');
                 const quizQuestions = await response.json();
-                const quizContainer = document.getElementById('quiz-container');
 
-                quizQuestions.forEach(question => {
+                const div1 = document.getElementById('div1');
+                const div2 = document.getElementById('div2');
+                const div3 = document.getElementById('div3');
+
+                let count = 0;
+                quizQuestions.forEach((question, index) => {
                     const questionDiv = document.createElement('div');
                     questionDiv.classList.add('quiz-question');
-
                     const questionText = document.createElement('p');
                     questionText.classList.add('question-text');
                     questionText.textContent = question.questionText;
@@ -153,7 +156,15 @@
                     });
                     questionDiv.appendChild(optionsList);
 
-                    quizContainer.appendChild(questionDiv);
+                    if (count < 3) {
+                        div1.appendChild(questionDiv);
+                    } else if (count >= 3 && count < 6) {
+                        div2.appendChild(questionDiv);
+                    } else {
+                        div3.appendChild(questionDiv);
+                    }
+
+                    count++;
                 });
             } catch (error) {
                 console.error('Error fetching quiz questions:', error);
@@ -161,7 +172,6 @@
             }
         }
 
-        // Function to submit the quiz
         async function submitQuiz() {
             const quizQuestions = document.querySelectorAll('.quiz-question');
             correctAnswers = 0;
@@ -181,8 +191,6 @@
 
             alert(`You answered ${correctAnswers} questions correctly out of ${quizQuestions.length}.`);
         }
-
-        // Function to check the correct option for a given question
         async function checkAnswer(questionId) {
             try {
                 const response = await fetch(`/quizzes/${questionId}`);
@@ -194,9 +202,81 @@
                 return ''; // Return an empty string if an error occurs
             }
         }
-
-        // Fetch quiz questions when the page loads
         window.onload = fetchQuizQuestions;
     </script>
+
+    
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get the student link
+        var TeacherLink1 = document.getElementById('TeacherLink1');
+        var TeacherLink2 = document.getElementById('TeacherLink2');
+        var TeacherLink3 = document.getElementById('TeacherLink3');
+  
+  
+  
+        // Get the mainContent div
+        var mainContent = document.getElementById('div1');
+        
+        // Get the CRUD container
+        var crudContainer = document.getElementById('div2');
+        var crudteacher = document.getElementById('div3');
+  
+        if (crudContainer) {
+            crudContainer.style.display = 'none';
+          }
+  
+          
+        if (crudteacher) {
+          crudteacher.style.display = 'none';
+          }
+  
+          TeacherLink1.addEventListener('click', function () {
+          // Hide the mainContent div
+          if (mainContent) {
+            mainContent.style.display = 'block';
+          }
+          if (crudteacher) {
+          crudteacher.style.display = 'none';
+          }
+          // Show the CRUD container
+          if (crudContainer) {
+            crudContainer.style.display = 'none';
+          }
+        });  
+        // Add click event listener to the student link
+        TeacherLink2.addEventListener('click', function () {
+          // Hide the mainContent div
+          if (crudContainer) {
+            crudContainer.style.display = 'block';
+          }
+  
+          if (mainContent) {
+            mainContent.style.display = 'none';
+          }
+          if (crudteacher) {
+          crudteacher.style.display = 'none';
+          }
+          // Show the CRUD container
+          
+        });
+  
+  
+        TeacherLink3.addEventListener('click', function () {
+          // Hide the mainContent div
+          if (mainContent) {
+            mainContent.style.display = 'none';
+          }
+          if (crudteacher) {
+          crudteacher.style.display = 'block';
+          }
+          // Show the CRUD container
+          if (crudContainer) {
+            crudContainer.style.display = 'none';
+          }
+        });
+      });
+    </script>
+      
 </body>
 </html>
