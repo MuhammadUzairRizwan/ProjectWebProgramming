@@ -13,8 +13,8 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: false, // Use `true` for port 465, `false` for all other ports
   auth: {
-    user: "Your email",
-    pass: "Your Pass key ",
+    user: "examify81@gmail.com",
+    pass: "",
   },
 });
 
@@ -59,21 +59,33 @@ router.post('/signup', async (req, res) => {
   // Save email to session
   req.session.email = email;
 
+
   try {
     let userModel;
     switch (user) {
-      case 'admin':
-        userModel = Admin;
-        break;
-      case 'student':
-        userModel = Student;
-        break;
-      case 'teacher':
-        userModel = Teacher;
-        break;
-      default:
-        return res.status(400).json({ message: 'Invalid user type' });
+        case 'admin':
+            userModel = Admin;
+            break;
+        case 'student':
+            userModel = Student;
+            break;
+        case 'teacher':
+            userModel = Teacher;
+            break;
+        default:
+            return res.status(400).json({ message: 'Invalid user type' });
     }
+    const newUser = new userModel({
+        fullname,
+        username,
+        email,
+        password,
+        birthdate,
+        userType: user // Include the userType field here
+    });
+    await newUser.save();
+
+
 
     // Generate verification code (a 4-digit random number)
     const verificationCode = Math.floor(1000 + Math.random() * 9000);
@@ -83,10 +95,10 @@ router.post('/signup', async (req, res) => {
 
     // Send verification email
     const mailOptions = {
-      from: 'Your email',
+      from: 'examify81@gmail.com',
       to: email,
-      subject: 'Email Verification',
-      text: `Your verification code is: ${verificationCode}`
+      subject: 'Examify Email Verification',
+      text: `Your verification code is: ${verificationCode}\n\n\n\nRegards:\nMuhammad Uzair Rizwan\nMuhammad Zunair Rizwan`
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
