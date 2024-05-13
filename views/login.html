@@ -144,6 +144,15 @@ input[type="submit"]:hover {
 </div>
 
 <script>
+const fs = require('fs');
+const crypto = require('crypto');
+
+// Generate a random string
+const secretKey = crypto.randomBytes(32).toString('hex');
+
+// Write the key to .env file
+fs.writeFileSync('.env', 'SESSION_SECRET=${secretKey}');
+
 function validateForm() {
     var username = document.getElementById("username").value;
     var password = document.getElementById("password").value;

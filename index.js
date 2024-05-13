@@ -7,6 +7,19 @@ const PORT = process.env.PORT || 3000;
 const MONGODB_URI = 'mongodb://localhost:27017/Examify'; // Your MongoDB URI with database name
 const app = express();
 
+require('dotenv').config(); // Load environment variables
+const session = require('express-session');
+
+
+app.use(session({
+    secret:'12345678',
+    resave: false,
+    saveUninitialized: true
+}));
+
+
+
+
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 

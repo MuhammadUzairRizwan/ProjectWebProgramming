@@ -1,7 +1,26 @@
+const nodemailer = require('nodemailer');
+require("dotenv").config()
 const express = require('express');
 const path = require('path');
 const router = express.Router();
 const { Admin, Student, Teacher,Quiz} = require('../models/User');
+
+// Dummy database to store user data and verification codes
+let users = {};
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false, // Use `true` for port 465, `false` for all other ports
+  auth: {
+    user: "Your email",
+    pass: "Your Pass key ",
+  },
+});
+
+
+
+
 
 
 // Route for the studentdashboard
@@ -27,44 +46,62 @@ router.get('/', (req, res) => {
 // Route for the signup
 // GET request to render the signup form
 router.get('/signup', (req, res) => {
-    res.sendFile(path.join(__dirname, '../views/signup.html'));
+    res.render('signup')
 });
 
 // POST request to handle form submission and create user
+
+
+// Route for handling signup form submission
 router.post('/signup', async (req, res) => {
-    const { fullname, username, email, password, birthdate, user } = req.body;
+  const { fullname, username, email, password, birthdate, user } = req.body;
 
-    try {
-        let userModel;
-        switch (user) {
-            case 'admin':
-                userModel = Admin;
-                break;
-            case 'student':
-                userModel = Student;
-                break;
-            case 'teacher':
-                userModel = Teacher;
-                break;
-            default:
-                return res.status(400).json({ message: 'Invalid user type' });
-        }
+  // Save email to session
+  req.session.email = email;
 
-        const newUser = new userModel({
-            fullname,
-            username,
-            email,
-            password,
-            birthdate,
-            userType: user // Include the userType field here
-        });
-
-        await newUser.save();
-        res.redirect('/login');
-    } catch (error) {
-        console.error('Error creating user:', error);
-        res.status(500).json({ message: 'Internal server error' });
+  try {
+    let userModel;
+    switch (user) {
+      case 'admin':
+        userModel = Admin;
+        break;
+      case 'student':
+        userModel = Student;
+        break;
+      case 'teacher':
+        userModel = Teacher;
+        break;
+      default:
+        return res.status(400).json({ message: 'Invalid user type' });
     }
+
+    // Generate verification code (a 4-digit random number)
+    const verificationCode = Math.floor(1000 + Math.random() * 9000);
+
+    // Store user data and verification code
+    users[email] = { fullname, username, email, password, birthdate, userType: user, verificationCode };
+
+    // Send verification email
+    const mailOptions = {
+      from: 'Your email',
+      to: email,
+      subject: 'Email Verification',
+      text: `Your verification code is: ${verificationCode}`
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error(error);
+        res.status(500).send('Error sending verification email');
+      } else {
+        console.log('Verification email sent: ' + info.response);
+        res.redirect('/verify_email');
+      }
+    });
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 // Route for the login
@@ -119,9 +156,28 @@ router.get('/ForgotPassword', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/ForgotPasswordPage.html'));
 });
 // Route for the verify_email
-router.get('/verifyemail', (req, res) => {
-    res.sendFile(path.join(__dirname, '../views/verify_email.html'));
+router.get('/verify_email', (req, res) => {
+    // Retrieve email from session
+    const userEmail = req.session.email;
+    res.render('verify_email', { userEmail });
 });
+router.post('/verify_email', (req, res) => {
+    const { email, verificationCode } = req.body;
+
+    // Check if verification code matches the one stored during signup
+    if (users[email] && users[email].verificationCode === parseInt(verificationCode)) {
+        // Mark email as verified
+        users[email].verified = true;
+        res.status(200).send('Verification successful'); // Send success response
+    } else {
+        res.status(400).send('Invalid verification code');
+    }
+});
+
+
+
+
+
 // Route for the Quiz
 router.get('/Quiz', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/Quiz.html'));
