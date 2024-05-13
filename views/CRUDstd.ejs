@@ -59,7 +59,13 @@
     <h1>Admin Panel</h1>
 
     <button class="btn btn-primary" onclick="createStudent()">Create Student</button>
-
+    <select id="sort" onchange="handleSort(this)">
+        <option id="sort1" value="fullname" >Full Name (A-Z)</option>
+        <option id="sort2" value="fullname">Full Name (Z-A)</option>
+  
+      </select>
+      
+    
     <table>
         <thead>
             <tr>
@@ -80,6 +86,17 @@
     <script>
         // Function to fetch student data from server and populate the table
         async function fetchStudents() {
+            try 
+            {
+                    const response = await fetch(`/students?sort=${document.getElementById('sort').value}`);
+                    const students = await response.json();
+                    const tableBody = document.getElementById('studentsTable');
+                    // Rest of the code remains the same...
+            } catch (error) {
+                    console.error(error);
+                    alert('Failed to fetch students');
+                }
+            
             try {
                 const response = await fetch('/students');
                 const students = await response.json();
@@ -222,8 +239,53 @@ async function fetchStudentByUsername(username) {
             }
         }
 
+        function handleSort(selectElement) {
+            sortTable();
+  const selectedOptionId = selectElement.options[selectElement.selectedIndex].id;
+  if (selectedOptionId === 'sort1') {
+    sortTable();
+  } else if (selectedOptionId === 'sort2') {
+    sortTable1();
+  }
+}
+
+        function sortTable() {
+            const table = document.querySelector('table');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            const sortField = document.getElementById('sort').value;
+            
+            rows.sort((a, b) => {
+                const aValue = a.querySelector(`td:nth-child(${['fullname'].indexOf(sortField) + 1})`).innerText.toLowerCase();
+                const bValue = b.querySelector(`td:nth-child(${['fullname'].indexOf(sortField) + 1})`).innerText.toLowerCase();
+                return aValue.localeCompare(bValue);
+            });
+
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+            }
+
+            function sortTable1() {
+  const table = document.querySelector('table');
+  const tbody = table.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  const sortField = document.getElementById('sort').value;
+  
+  rows.sort((a, b) => {
+    const aValue = a.querySelector(`td:nth-child(${['fullname'].indexOf(sortField) + 1})`).innerText.toLowerCase();
+    const bValue = b.querySelector(`td:nth-child(${['fullname'].indexOf(sortField) + 1})`).innerText.toLowerCase();
+    // Reverse the comparison for descending order
+    return bValue.localeCompare(aValue);
+  });
+
+  tbody.innerHTML = '';
+  rows.forEach(row => tbody.appendChild(row));
+}
+    
+
         // Load data when the page is loaded
         window.onload = fetchStudents;
+
     </script>
 </body>
 </html>
