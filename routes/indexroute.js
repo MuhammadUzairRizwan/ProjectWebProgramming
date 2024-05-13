@@ -3,7 +3,9 @@ require("dotenv").config()
 const express = require('express');
 const path = require('path');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
 const { Admin, Student, Teacher,Quiz} = require('../models/User');
+const { stringify } = require('querystring');
 
 // Dummy database to store user data and verification codes
 let users = {};
@@ -14,7 +16,7 @@ const transporter = nodemailer.createTransport({
   secure: false, // Use `true` for port 465, `false` for all other ports
   auth: {
     user: "examify81@gmail.com",
-    pass: "",
+    pass: "xbzz nvto xfgz njky",
   },
 });
 
@@ -54,8 +56,10 @@ router.get('/signup', (req, res) => {
 
 // Route for handling signup form submission
 router.post('/signup', async (req, res) => {
-  const { fullname, username, email, password, birthdate, user } = req.body;
 
+    
+  var { fullname, username, email, password, birthdate, user } = req.body;
+  var hashedPassword = await bcrypt.hash(password, 10); 
   // Save email to session
   req.session.email = email;
 
@@ -75,6 +79,7 @@ router.post('/signup', async (req, res) => {
         default:
             return res.status(400).json({ message: 'Invalid user type' });
     }
+    password=hashedPassword
     const newUser = new userModel({
         fullname,
         username,
@@ -122,23 +127,25 @@ router.get('/login', (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-    const { username, password } = req.body;
+    var { username, password } = req.body;
+
     let userType = null;
 
     try {
-        // Check if the username exists in any of the user types
-        const admin = await Admin.findOne({ username, password });
-        const student = await Student.findOne({ username, password });
-        const teacher = await Teacher.findOne({ username, password });
+        // Find the user by username
+        const admin = await Admin.findOne({ username });
+        const student = await Student.findOne({ username });
+        const teacher = await Teacher.findOne({ username });
 
-        // Check which user type exists and set the userType accordingly
-        if (admin) {
+        // Check if the user exists and if the password matches
+        if (admin && await bcrypt.compare(password, admin.password)) {
             userType = 'admin';
-        } else if (student) {
+        } else if (student && await bcrypt.compare(password, student.password)) {
             userType = 'student';
-        } else if (teacher) {
+        } else if (teacher && await bcrypt.compare(password, teacher.password)) {
             userType = 'teacher';
         }
+
         // If user exists in any type, redirect to respective dashboard
         if (userType) {
             // Redirect based on userType
@@ -161,8 +168,9 @@ router.post('/login', async (req, res) => {
     } catch (error) {
         console.error('Error logging in:', error);
         res.status(500).json({ message: 'Internal server error'});
-}
+    }
 });
+
 // Route for the ForgotPasswordPage
 router.get('/ForgotPassword', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/ForgotPasswordPage.html'));
