@@ -98,7 +98,7 @@
     <div class="container">
         <!-- <h1>Quiz</h1> -->
         <div id="quiz-container"></div>
-        <button type="submit" class="btn btn-primary btn-next" onclick="submitQuiz()"">Submit</button>
+        <button type="submit" class="btn btn-primary btn-next" onclick="submitQuiz()">Submit</button>
         <div id="result" class="result"></div>
     </div>
 <br><br><br>
@@ -189,6 +189,8 @@
                 }
             }
 
+            updateStudent('<%= username %>',correctAnswers);
+
             alert(`You answered ${correctAnswers} questions correctly out of ${quizQuestions.length}.`);
         }
         async function checkAnswer(questionId) {
@@ -202,11 +204,64 @@
                 return ''; // Return an empty string if an error occurs
             }
         }
+
+        async function updateStudent(username,marak) {
+    try {
+        const currentStudent = await fetchStudentByUsername(username); // Fetch current student data
+
+        // Prompt user for each field
+        var newMarks = marak;
+       
+        // Construct the updated student object
+        const updatedStudent = {
+            fullname: currentStudent.fullname, // If prompt is empty or canceled, use current value
+            username: currentStudent.username,
+            email:currentStudent.email,
+            password:  currentStudent.password,
+            birthdate:  currentStudent.birthdate, // Parse new date or use current value
+            marks: newMarks !== '' ? parseInt(newMarks) : currentStudent.marks,
+
+        };
+
+        const response = await fetch(`/students/${username}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedStudent)
+        });
+
+        if (response.ok) {
+            alert('Student updated successfully');
+            fetchStudents(); // Refresh the table
+        } else {
+            alert('Failed to update student');
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Failed to update student');
+    }
+}
+async function fetchStudentByUsername(username) {
+    try {
+        const response = await fetch(`/students/${username}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch student');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        alert('Failed to fetch student');
+    }
+}
+
+
         window.onload = fetchQuizQuestions;
     </script>
 
     
 <script>
+    
     document.addEventListener('DOMContentLoaded', function () {
         // Get the student link
         var TeacherLink1 = document.getElementById('TeacherLink1');
@@ -276,6 +331,10 @@
           }
         });
       });
+      
+ 
+
+
     </script>
       
 </body>

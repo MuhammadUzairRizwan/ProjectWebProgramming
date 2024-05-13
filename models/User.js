@@ -15,7 +15,9 @@ const studentSchema = new mongoose.Schema({
     email: { type: String, required: true },
     password: { type: String, required: true },
     birthdate: { type: Date, required: true },
-    userType: { type: String, enum: ['student'], required: true, default: 'student' } // Default to 'student' for student users
+    userType: { type: String, enum: ['student'], required: true, default: 'student' }, // Default to 'student' for student users
+    marks: { type: Number, default: -1 }
+
 });
 
 const teacherSchema = new mongoose.Schema({

@@ -210,7 +210,8 @@ router.post('/verify_email', (req, res) => {
 
 // Route for the Quiz
 router.get('/Quiz', (req, res) => {
-    res.sendFile(path.join(__dirname, '../views/Quiz.html'));
+    const username = req.session.username;
+    res.render('Quiz', { userEmail });
 });
 
 // Route for the addtest
