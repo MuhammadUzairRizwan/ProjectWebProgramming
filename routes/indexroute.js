@@ -37,9 +37,19 @@ router.get("/TeacherDashboard", (req, res)=>{
     return res.render("TeacherDashboard");
 });
 router.get("/StudentDashboard", (req, res)=>{
-    return res.render("StudentDashboard");
+
+    
+const username = req.session.username;
+res.render('StudentDashboard', { username });
 });
 
+
+router.get("/editprofile", (req, res)=>{
+
+    
+    const username = req.session.username;
+    res.render('editprofile', { username });
+    });
 
 // Route for the homepage
 router.get('/', (req, res) => {
@@ -123,12 +133,12 @@ router.post('/signup', async (req, res) => {
 
 // Route for the login
 router.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, '../views/login.html'));
+    res.render('login')
 });
 
 router.post('/login', async (req, res) => {
     var { username, password } = req.body;
-
+    req.session.username = username;
     let userType = null;
 
     try {

@@ -296,6 +296,7 @@
         <input type="file" id="profile_image" style="display: none;" accept="image/*" onchange="previewImage(event)">
     </center>
 
+    <a href=""><%= username %></a>
     <a id="admindashboard" href="#"><i class="fas fa-user-graduate"></i><span>Dashboard</span></a>
     <a id="studentLink" href="#"><i class="fas fa-user-graduate"></i><span>Exam</span></a>
     <a href="/student/student-marks"><i class="fas fa-sort-numeric-up"></i><span>Marks</span></a>
@@ -303,33 +304,11 @@
 <!--sidebar end-->
 
   <br><br>
-  <div class="container" id="mainContent" style="margin-left: 370px;margin-top: 20%;">
-    <!-- <div class="container custom-card-container">
-      <div class="row justify-content-end">
-        <div class="col-md-8 col-xl-10">
-          <div class="row" style="display:flex;">
-            <div class="col-md-6 custom-card" style="margin-right:100px;">
-              <div class="card bg-c-yellow order-card">
-                <div class="card-block" style="margin-right:150px;" >
-                  <h6 class="m-b-20">Total Exams Available</h6>
-                  <h2 class="text-right"><i class="fas fa-book f-left"></i><span>{{total_course}}</span></h2>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 custom-card"> 
-              <div class="card bg-c-pink order-card">
-                <div class="card-block" style="margin-right:150px;">
-                  <h6 class="m-b-20">Total Questions</h6>
-                  <h2 class="text-right"><i class="fas fa-question-circle f-left"></i><span>{{total_question}}</span></h2>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
+  <div class="container" id="mainContent" style="margin-left: 370px;margin-top: 20%;background-color:white;padding-right:75%;">
+    <%- include('editprofile'); %>
   </div>
   <div id = "crud" style="margin-top: 5%;" >
+   
     <%- include('Quiz'); %>
   </div>
 
