@@ -189,7 +189,7 @@
                 }
             }
 
-            updateStudent('<%= username %>',correctAnswers);
+            updateStudent1('<%= username %>',correctAnswers);
 
             alert(`You answered ${correctAnswers} questions correctly out of ${quizQuestions.length}.`);
         }
@@ -205,22 +205,19 @@
             }
         }
 
-        async function updateStudent(username,marak) {
+        async function updateStudent1(username, marak) {
     try {
-        const currentStudent = await fetchStudentByUsername(username); // Fetch current student data
+        const currentStudent = await fetchStudentByUsername(username);
 
-        // Prompt user for each field
-        var newMarks = marak;
+        if (!currentStudent) {
+            throw new Error('Student not found');
+        }
+
+        const newMarks = marak; // Check if marak holds the correct value
        
-        // Construct the updated student object
         const updatedStudent = {
-            fullname: currentStudent.fullname, // If prompt is empty or canceled, use current value
-            username: currentStudent.username,
-            email:currentStudent.email,
-            password:  currentStudent.password,
-            birthdate:  currentStudent.birthdate, // Parse new date or use current value
+            ...currentStudent, // Maintain other fields
             marks: newMarks !== '' ? parseInt(newMarks) : currentStudent.marks,
-
         };
 
         const response = await fetch(`/students/${username}`, {
@@ -232,16 +229,16 @@
         });
 
         if (response.ok) {
-            alert('Student updated successfully');
-            fetchStudents(); // Refresh the table
+           // alert('Student updated successfully');
         } else {
-            alert('Failed to update student');
+            throw new Error('Failed to update student');
         }
     } catch (error) {
         console.error(error);
         alert('Failed to update student');
     }
 }
+
 async function fetchStudentByUsername(username) {
     try {
         const response = await fetch(`/students/${username}`);

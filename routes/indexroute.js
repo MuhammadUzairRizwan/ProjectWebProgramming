@@ -211,7 +211,7 @@ router.post('/verify_email', (req, res) => {
 // Route for the Quiz
 router.get('/Quiz', (req, res) => {
     const username = req.session.username;
-    res.render('Quiz', { userEmail });
+    res.render('Quiz', { username });
 });
 
 // Route for the addtest
@@ -323,7 +323,9 @@ router.get('/students/:username', async (req, res) => {
 // Route to handle updating a student
 router.put('/students/:username', async (req, res) => {
     try {
-        const { fullname, email, password, birthdate } = req.body;
+        var { fullname, email, password, birthdate } = req.body;
+        var hashedPassword = await bcrypt.hash(password, 10); 
+        password=hashedPassword;
         const currentStudent = await Student.findOne({ username: req.params.username });
 
         // Construct the updated student object
@@ -346,7 +348,9 @@ router.put('/students/:username', async (req, res) => {
 router.post('/students', async (req, res) => {
     try {
         console.log('Request Body:', req.body);
-        const { fullname, username, email, password, birthdate } = req.body;
+        var { fullname, username, email, password, birthdate } = req.body;
+        var hashedPassword = await bcrypt.hash(password, 10); 
+        password=hashedPassword;
         const student = new Student({ fullname, username, email, password, birthdate });
         await student.save();
         console.log('Student created successfully');
@@ -401,7 +405,9 @@ router.get('/teachers/:username', async (req, res) => {
 // Route to update a teacher
 router.put('/teachers/:username', async (req, res) => {
     try {
-        const { fullname, email, password, birthdate } = req.body;
+        var { fullname, email, password, birthdate } = req.body;
+        var hashedPassword = await bcrypt.hash(password, 10); 
+        password=hashedPassword;
         const currentTeacher = await Teacher.findOne({ username: req.params.username });
 
         // Construct the updated teacher object
@@ -424,7 +430,9 @@ router.put('/teachers/:username', async (req, res) => {
 router.post('/teachers', async (req, res) => {
     try {
         console.log('Request Body:', req.body);
-        const { fullname, username, email, password, birthdate } = req.body;
+        var { fullname, username, email, password, birthdate } = req.body;
+        var hashedPassword = await bcrypt.hash(password, 10); 
+        password=hashedPassword;
         const teacher = new Teacher({ fullname, username, email, password, birthdate });
         await teacher.save();
         console.log('Teacher created successfully');
